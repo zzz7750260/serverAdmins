@@ -7,4 +7,4 @@ function theId(){
 	return theId = tid + r1 + sysDate + r2;
 }
 
-module.exports = theId;
+module.exports.theId = theId;

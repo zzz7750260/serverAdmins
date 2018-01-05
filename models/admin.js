@@ -9,16 +9,16 @@ var useSchema = new Schema({
 	"userQQ":Number,
 	"userTel":Number,
 	"userEmail":String,
+	"userRole":Number,
 	"userArticle":[{
 		"articleID":Number,
 		"articleTitle":String,
 		"articleContent":String,
 		"articleData":String,
-		"articlCheck":Boolean,
-		
+		"articleCheck":Boolean,
+		"articleCommits":Array,
 	}],
 	"userGoods":Array,
-	"userRole":Number,
 });
 
 module.exports = mongoose.model('user',useSchema);

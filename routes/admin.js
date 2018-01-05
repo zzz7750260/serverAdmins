@@ -27,19 +27,56 @@ router.get("/",function(req, res, next){
 	
 });
 
+//用户注册，插入新用户
 router.post("/registe", function(req, res, next){
 	let theUserID , 
-		theUserName = req.body.useName,
-		thePass = req.body.userPass,
-		theUserJoinTime ,
-		theUserQQ = req.body.userQQ,
-		theUserTel = req.body.userTel,
-		theUserEmail = req.body.userEmail,
-		theUserRole = req.body.userRole;
-	
+		theUserName = req.body.params.userName,
+		thePass = req.body.params.userPass,
+		theUserJoinTime,
+		theUserQQ = req.body.params.userQQ,
+		theUserTel = req.body.params.userTel,
+		theUserEmail = req.body.params.userEmail,
+		theUserRole = req.body.params.userRole;
+
 	//生成用户id
-		console.log(RandomId.theId());
-		
+	console.log(RandomId.theId());
+	theUserID = RandomId.theId();
+	
+	theUserJoinTime = new Date().Format('yyyy-MM-dd hh:mm:ss');
+	
+	let params = {
+		userID:theUserID,
+		userName:theUserName,
+		userPass:thePass,
+		userJoinTime:theUserJoinTime,
+		userQQ:theUserQQ,
+		userTel:theUserTel,
+		userEmail:theUserEmail,
+		userRole:theUserRole,
+		userArticle:[],
+		userGoods:[],
+	}
+	console.log(params);
+	
+	//插入新用户
+	theUser = new Admin(params);
+	theUser.save(function(err,doc){
+		if(err){
+			res.json({
+				status:"1",
+				msg:err.message,
+				result:"出现错误"
+			})
+		}
+		else{
+			res.json({
+				status:"0",
+				msg:"用户注册成功",
+				result:doc,
+			})
+		}
+	})
+	
 })
 
 
