@@ -36,6 +36,7 @@ router.post("/registe", function(req, res, next){
 		theUserQQ = req.body.params.userQQ,
 		theUserTel = req.body.params.userTel,
 		theUserEmail = req.body.params.userEmail,
+		theUserAge = req.body.params.userAge,
 		theUserRole = req.body.params.userRole;
 
 	//生成用户id
@@ -52,6 +53,7 @@ router.post("/registe", function(req, res, next){
 		userQQ:theUserQQ,
 		userTel:theUserTel,
 		userEmail:theUserEmail,
+		userAge:theUserAge.
 		userRole:theUserRole,
 		userArticle:[],
 		userGoods:[],

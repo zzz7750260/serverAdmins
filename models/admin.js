@@ -9,6 +9,7 @@ var useSchema = new Schema({
 	"userQQ":Number,
 	"userTel":Number,
 	"userEmail":String,
+	"userAge":Number,
 	"userRole":Number,
 	"userArticle":[{
 		"articleID":Number,
