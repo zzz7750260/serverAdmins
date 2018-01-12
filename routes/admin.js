@@ -53,7 +53,7 @@ router.post("/registe", function(req, res, next){
 		userQQ:theUserQQ,
 		userTel:theUserTel,
 		userEmail:theUserEmail,
-		userAge:theUserAge.
+		userAge:theUserAge,
 		userRole:theUserRole,
 		userArticle:[],
 		userGoods:[],
