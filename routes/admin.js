@@ -82,5 +82,38 @@ router.post("/registe", function(req, res, next){
 })
 
 
+//注册用户查找用户名是否存在
+router.get("/findUserName",function(req, res, next){
+	var theUserName = req.query.userName;
+	Admin.findOne({theUserName},function(err,doc){
+		if(err){
+			res.json({
+				status:"1",
+				msg:err.message,
+				result:"出现错误"
+			})			
+		}
+		else{
+			console.log("===========查找username的值==============")
+			console.log(doc)
+			if(doc){
+				res.json({
+					status:"0",
+					msg:'用户名存在，不可以注册',
+					result:doc
+				})
+			}
+			else{
+				res.json({
+					status:"2",
+					msg:"",
+					result:"用户名不存在，可以注册"					
+				})
+			}
+		}
+	})	
+})
+
+
 
 module.exports = router;
