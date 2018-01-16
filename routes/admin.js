@@ -85,7 +85,7 @@ router.post("/registe", function(req, res, next){
 //注册用户查找用户名是否存在
 router.get("/findUserName",function(req, res, next){
 	var theUserName = req.query.userName;
-	Admin.findOne({theUserName},function(err,doc){
+	Admin.findOne({userName:theUserName},function(err,doc){
 		if(err){
 			res.json({
 				status:"1",
