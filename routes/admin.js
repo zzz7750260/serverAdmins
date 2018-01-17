@@ -114,6 +114,41 @@ router.get("/findUserName",function(req, res, next){
 	})	
 })
 
+//用户登录
+router.get("/login",function(req, res, next){
+	var theUserName = req.query.username,
+		thePassWord = req.query.password;
+		
+	Admin.findOne({userName:theUserName},function(err,doc){
+		if(err){
+			res.json({
+				status:"0",
+				msg:err.message,
+				result:"出现错误"
+			})
+		}
+		else{
+			if(!doc){
+				res.json({
+					status:"1",
+					msg:"用户名不存在",
+					result:""
+				})				
+			}
+			else{
+				console.log(doc);
+				if(doc.userPass != thePassWord){
+					res.json({
+						status:"2",
+						msg:"输入密码错误",
+						result:""
+					})					
+				}
+			}
+		}
+	})	
+	
+})
 
 
 module.exports = router;
