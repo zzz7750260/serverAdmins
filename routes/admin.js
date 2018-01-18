@@ -144,6 +144,13 @@ router.get("/login",function(req, res, next){
 						result:""
 					})					
 				}
+				else{
+					res.json({
+						status:"3",
+						msg:"登录成功",
+						result:doc						
+					})					
+				}
 			}
 		}
 	})	
