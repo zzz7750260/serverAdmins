@@ -10,7 +10,8 @@ var useSchema = new Schema({
 	"userTel":Number,
 	"userEmail":String,
 	"userAge":Number,
-	"userRole":Number,
+	"userRole":Array,
+	"token":String,
 	"userArticle":[{
 		"articleID":Number,
 		"articleTitle":String,

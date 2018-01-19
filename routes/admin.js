@@ -37,11 +37,18 @@ router.post("/registe", function(req, res, next){
 		theUserTel = req.body.params.userTel,
 		theUserEmail = req.body.params.userEmail,
 		theUserAge = req.body.params.userAge,
-		theUserRole = req.body.params.userRole;
+		theUserRole = req.body.params.userRole,
+		theToken;//定义token
 
 	//生成用户id
-	console.log(RandomId.theId());
-	theUserID = RandomId.theId();
+	
+	console.log("用户id：" + RandomId.theRandomId());
+	theUserID = RandomId.theRandomId();
+	
+	//生成用户token
+	theToken = RandomId.theTokenId(theUserName);
+	console.log("用户token：" + theToken);
+	
 	
 	theUserJoinTime = new Date().Format('yyyy-MM-dd hh:mm:ss');
 	
@@ -57,6 +64,8 @@ router.post("/registe", function(req, res, next){
 		userRole:theUserRole,
 		userArticle:[],
 		userGoods:[],
+		token:theToken
+		
 	}
 	console.log(params);
 	
@@ -116,8 +125,14 @@ router.get("/findUserName",function(req, res, next){
 
 //用户登录
 router.get("/login",function(req, res, next){
-	var theUserName = req.query.username,
-		thePassWord = req.query.password;
+	console.log("========用户登录信息==========")
+	console.log(req.query);
+	var arrData = JSON.parse(req.query.data);
+	var theUserName = arrData.username,
+		thePassWord = arrData.password;
+	console.log("========用户名==========")
+	console.log(arrData);	
+	console.log("用户名："+arrData.username)
 		
 	Admin.findOne({userName:theUserName},function(err,doc){
 		if(err){
@@ -148,7 +163,8 @@ router.get("/login",function(req, res, next){
 					res.json({
 						status:"3",
 						msg:"登录成功",
-						result:doc						
+						result:doc,	
+						token:doc.token
 					})					
 				}
 			}
