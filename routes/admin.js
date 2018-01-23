@@ -123,7 +123,7 @@ router.get("/findUserName",function(req, res, next){
 	})	
 })
 
-//用户登录
+//用户登录(这里只是获取token的信息)
 router.get("/login",function(req, res, next){
 	console.log("========用户登录信息==========")
 	console.log(req.query);
@@ -173,5 +173,36 @@ router.get("/login",function(req, res, next){
 	
 })
 
+//用户登录信息（根据Token获取用户信息）
+router.get("/info",function(req, res, next){
+	let theTokenP = req.query.token;
+	console.log("token的信息："+ theTokenP);
+	Admin.findOne({token:theTokenP},function(err,doc){
+		if(err){
+			res.json({
+				status:'0',
+				msg:err.message,
+				result:"出现未知错误"
+			})
+		}
+		else{
+			if(!doc){
+				res.json({
+					status:'1',
+					msg:"该token不存在",
+					result:''
+				})				
+			}
+			else{
+				res.json({
+					status:"2",
+					msg:"token存在，正获取用户信息",
+					result:doc					
+				})							
+			}
+		}
+	})
+	
+})
 
 module.exports = router;
