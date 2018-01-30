@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Admin = require('../models/admin');
+var Role = require('../models/roles')
 require('../util/dataUtil.js');
 var RandomId = require('../util/randomId.js');
 
@@ -204,5 +205,82 @@ router.get("/info",function(req, res, next){
 	})
 	
 })
+
+
+//添加用户角色
+router.post("/addRole",function(req, res, next){
+	let troleName = req.body.therole,
+		ttheRole = req.body.theroleen;
+		
+	var params = {
+		"roleName":troleName,
+		"theRole":ttheRole		
+	}
+	console.log("==============获取post参数============")
+	console.log(params)
+	console.log(req.body)
+	
+	////////////查找角色是否存在/////////////////
+	Role.findOne({roleName:troleName},function(err,doc1){
+		if(err){
+			res.json({
+				status:"1",
+				msg:err.message,
+				result:""			
+			})			
+		}
+		else{
+			if(doc1){
+				res.json({
+					status:"2",
+					msg:"该角色存在",
+					result:doc1					
+				})				
+			}
+			else{
+				Role.findOne({theRole:ttheRole},function(err,doc2){
+					if(err){
+						res.json({
+							status:"1",
+							msg:err.message,
+							result:""			
+						})			
+					}
+					else{
+						if(doc2){
+							res.json({
+								status:"3",
+								msg:"该英文存在",
+								result:""							
+							})
+						}
+						else{
+							addRole = new Role(params);
+							addRole.save(function(err,doc3){
+								if(err){
+									res.json({
+										status:"1",
+										msg:err.message,
+										result:""			
+									})			
+								}
+								else{
+									res.json({
+										status:"4",
+										msg:"添加角色成功",
+										result:doc3
+									})			
+								}
+							})													
+						}
+					}					
+				})			
+			}
+		}
+	})
+	
+})
+
+
 
 module.exports = router;
