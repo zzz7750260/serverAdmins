@@ -282,5 +282,30 @@ router.post("/addRole",function(req, res, next){
 })
 
 
+//角色查询循环
+router.get('/getRole',function(req, res, next){
+	Role.find({},function(err,doc){
+		if(err){
+			res.json({
+				status:"1",
+				msg:err.message,
+				result:"角色循环出现错误1"
+			})
+		}
+		else{
+			if(doc){
+				console.log("===============角色列表==============")
+				console.log(doc)
+				res.json({
+					status:"2",
+					msg:"循环角色列表",
+					result:doc
+				})
+			}			
+		}
+	})			
+})
+
+
 
 module.exports = router;
