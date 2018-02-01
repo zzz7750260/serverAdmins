@@ -306,6 +306,63 @@ router.get('/getRole',function(req, res, next){
 	})			
 })
 
+//查询用户
+router.get("/getUser",function(req, res, next){
+	Admin.find({},function(err,doc){
+		if(err){
+			res.json({
+				status:"1",
+				msg:err.message,
+				result:"查询用户出现错误"			
+			})
+		}	
+		else{
+			if(doc){
+				console.log("===============用户列表==============")
+				console.log(doc)
+				let numUsers = doc.length;
+				res.json({
+					status:"2",
+					msg:"用户查询成功",
+					result:{
+						userNum:numUsers,
+						theUsers:doc
+					}
+				})
+			}			
+		}				
+	})
+	
+})
+
+//批量修改用户权限
+router.post("/changeRole",function(req, res, next){
+	let tUserArray = req.body.userArray,
+		tUserRole = 
+		userArrayLength = userArray.length;
+
+	//采用同步操作等待批量更改完成后再返回res
+	var goStart = function(){ 	
+		return new Promise(function(){
+			for(var i=0; i<userArrayLength; i++){
+				Admin.findOne({userName:userArray[i]},function(err,doc){
+					if(err){
+						res.json({
+							status:"1",
+							msg:err.message,
+							result:"用户权限修改出现错误"
+						})						
+					}else{
+						doc.
+						
+					}					
+				})			
+			}			
+		})
+
+	}
+})
+
 
 
 module.exports = router;
