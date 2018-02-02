@@ -336,9 +336,9 @@ router.get("/getUser",function(req, res, next){
 })
 
 //批量修改用户权限
-router.post("/changeRole",function(req, res, next){
+router.post("/getChangeRole",function(req, res, next){
 	let tUserArray = req.body.userArray,
-		tUserRole = 
+		tUserRole = req.body.userRole,
 		userArrayLength = userArray.length;
 
 	//采用同步操作等待批量更改完成后再返回res
@@ -353,14 +353,33 @@ router.post("/changeRole",function(req, res, next){
 							result:"用户权限修改出现错误"
 						})						
 					}else{
-						doc.
-						
+						if(doc){
+							console.log("============循环出来的用户权限，等待更改==============")
+							console.log(doc);
+							doc.userRole = [""+tUserRole+""];
+							console.log("============更改后的用户==============")
+							console.log(doc);
+							Admin.save(doc,function(err){
+								if(err){
+									console.log("更改出现错误");					
+								}
+								else{
+									console.log("更改成功");
+								}
+							})
+						}						
 					}					
 				})			
-			}			
+			}
+			console.log("内：更改结束")
 		})
 
 	}
+	
+	var finishXg = async function (){
+		let result = goStart();
+		console.log("外：更改结束")
+	} 
 })
 
 
