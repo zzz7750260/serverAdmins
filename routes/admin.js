@@ -336,16 +336,20 @@ router.get("/getUser",function(req, res, next){
 })
 
 //批量修改用户权限
-router.post("/getChangeRole",function(req, res, next){
+router.post("/getChangeRoles",function(req, res, next){
 	let tUserArray = req.body.userArray,
-		tUserRole = req.body.userRole,
-		userArrayLength = userArray.length;
+		tUserRole = req.body.userRole;
+		
+	let userArrayLength = tUserArray.length;
+		
+	console.log("tUserArray:"+tUserArray);
+	console.log("tUserRole:"+tUserRole);
 
 	//采用同步操作等待批量更改完成后再返回res
 	var goStart = function(){ 	
-		return new Promise(function(){
+		return new Promise(function(resolve,reject){
 			for(var i=0; i<userArrayLength; i++){
-				Admin.findOne({userName:userArray[i]},function(err,doc){
+				Admin.findOne({userName:tUserArray[i]},function(err,doc){
 					if(err){
 						res.json({
 							status:"1",
@@ -359,7 +363,7 @@ router.post("/getChangeRole",function(req, res, next){
 							doc.userRole = [""+tUserRole+""];
 							console.log("============更改后的用户==============")
 							console.log(doc);
-							Admin.save(doc,function(err){
+							doc.save(function(err){
 								if(err){
 									console.log("更改出现错误");					
 								}
@@ -372,14 +376,26 @@ router.post("/getChangeRole",function(req, res, next){
 				})			
 			}
 			console.log("内：更改结束")
+			resolve('ok');			
 		})
 
 	}
 	
 	var finishXg = async function (){
-		let result = goStart();
+		console.log("外部:循环更改用户权限");
+		let result = await goStart();
 		console.log("外：更改结束")
+		console.log("这个是result:"+result);
+		if(result ==='ok'){
+			res.json({
+				status:"2",
+				msg:"更改成功",
+				result:''
+			})
+		}
 	} 
+	finishXg()
+	
 })
 
 
