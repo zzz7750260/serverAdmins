@@ -161,12 +161,28 @@ router.get("/login",function(req, res, next){
 					})					
 				}
 				else{
-					res.json({
-						status:"3",
-						msg:"登录成功",
-						result:doc,	
-						token:doc.token
-					})					
+					//生成一个新的token，并保存在对应的用户中
+					var theNewToken = RandomId.theTokenId(theUserName);
+					doc.token = theNewToken;
+					console.log("===========查看重新登录的用户（token值已经更改）=============")
+					console.log(doc);
+					doc.save(function(err,doc1){
+						if(err){
+							res.json({
+								status:"1",
+								msg:err.message,
+								result:"登录出现错误"							
+							})
+						}
+						else{
+							res.json({
+								status:"3",
+								msg:"登录成功",
+								result:doc1,	
+								token:doc1.token
+							})	
+						}						
+					})				
 				}
 			}
 		}
@@ -204,6 +220,39 @@ router.get("/info",function(req, res, next){
 		}
 	})
 	
+})
+
+//用户登出
+router.post("/logOut",function(req, res, next){
+	let theToken = req.body.token;
+	Admin.findOne({token:theToken},function(err,doc){
+		if(err){
+			res.json({
+				status:"1",
+				msg:err.message,
+				result:"登出时发生未知错误"
+			})
+		}
+		else{
+			if(!doc){
+				res.json({
+					status:"2",
+					msg:"该token已经失效",
+					result:""
+				})
+			}
+			else{
+				doc.token = '';
+				console.log("===============登出后的用户信息===============")
+				console.log(doc)
+				res.json({
+					status:"3",
+					msg:"登出成功",
+					result:""
+				})				
+			}
+		}		
+	})				
 })
 
 
