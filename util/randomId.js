@@ -14,6 +14,13 @@ var theMathT = {
 		return theToke;	
 		console.log(tname)
 		return tname;
+	},
+	theArticleId:function(){
+		var articleNum = "566";
+		var sysDate = new Date().Format('yyyyMMddhhmmss')
+		var ArticleId = articleNum + sysDate;
+		console.log("文章id为：" + ArticleId);
+		return ArticleId;
 	}
 }
 
