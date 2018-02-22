@@ -7,7 +7,7 @@ var articleSchema = new Schema({
 	"articleTitle":String,
 	"articleShortContent":String,
 	"articleContent":String,
-	"articleTitle":String,
+	"articleTime":String,
 	"articleSource":String,
 	"articleImg":String,
 	"articleStatus":String,
