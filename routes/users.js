@@ -66,51 +66,127 @@ router.post('/addArticle',function(req, res, next){
 })
 
 /*文章列表*/
-router.get('/listArticle',function(req, res, next){
+router.get('/listArticle',function(req, res, next){	
 	//文章查询
 	console.log("==============查看传来的参数==============");
-	console.log(req.query)		
-	var theStatus = req.query.articleStatus;	
-	if(theStatus == null){
-		Article.find({},function(err,doc){
-			if(err){
-				res.json({
-					status:"1",
-					msg:err.message,
-					result:"文章查询出现错误"
-				})
-			}
-			else{
-				console.log("==============文章查询列表===============");
-				console.log(doc);
-				res.json({
-					status:"2",
-					msg:"文章查询成功",
-					result:doc
-				})
-			}		
-		})			
+	console.log(req.query)
+	//分页参数
+	var thePageSize = req.query.pageSize,
+		thePage = req.query.page,
+		theLimit = req.query.pageSizes,
+		skip;
+		
+	skip = (parseInt(thePage) - 1)*parseInt(thePageSize);
+
+  	
+	//列表状态查询参数	
+	var theStatus = req.query.articleStatus;
+	
+	var params,
+		ArticleList,
+		ArticleListNum,
+		ArticleModel;
+	
+	if(theStatus == null || theStatus == ''){
+		params = {};		
 	}
 	else{
-		Article.find({articleStatus:theStatus},function(err,doc){
-			if(err){
-				res.json({
-					status:"1",
-					msg:err.message,
-					result:"文章查询出现错误"
-				})
-			}
-			else{
-				console.log("==============文章查询列表===============");
-				console.log(doc);
-				res.json({
-					status:"2",
-					msg:"文章查询成功",
-					result:doc
-				})
-			}		
-		})
+		params = {articleStatus:theStatus}			
 	}
+	
+	//文章获取方法的模块，对总数以及分块的操作
+	ArticleModel = {
+		totalNum:function totalNum(params){
+			return	Article.find(params).exec()				
+		},
+		findArticle:function findArticle(params){
+			ArticleList = Article.find(params).limit(parseInt(thePageSize)).skip(skip);
+			
+			return ArticleList.exec()						
+		}		
+	}
+		
+	//执行模块并返回对应的结果
+	Promise.all([
+		ArticleModel.totalNum(params),
+		ArticleModel.findArticle(params)
+	]).then(function(doc){
+		if(!doc){
+			res.json({
+				status:"1",
+				msg:err.message,
+				result:"数据查询出现错误",
+			})			
+		}
+		else{
+			console.log("================获取文章的总数量================");
+			console.log(doc[0].length);
+			console.log("===============放回文章的查询结果================");
+			console.log(doc[1]);
+			
+			res.json({
+				status:"2",
+				msg:"文章查询成功",
+				result:{
+					total:doc[0].length,
+					theResult:doc[1]
+				}				
+			})
+			
+		}
+		
+	})
+	
+	
+//	ArticleList = Article.find(params).limit(parseInt(thePageSize)).skip(skip);
+//	ArticleList.exec(function(err,doc){
+//		if(err){
+//			res.json({
+//				status:"1",
+//				msg:err.message,
+//				result:"文章查询出现错误"
+//			})
+//		}
+//		else{
+//			console.log("==============文章查询列表===============");
+//			console.log(doc);
+//			res.json({
+//				status:"2",
+//				msg:"文章查询成功",
+//				result:{
+//					num:doc.length,
+//					theDoc:doc,
+//				}
+//			})
+//		}		
+//	})			
 })
+
+//获取文章详情
+router.get('/articleDetail',function(req, res, next){
+	var theID = req.query.articleID;
+	console.log("=============获取的文章ID================");
+	console.log(theID)
+	Article.findOne({articleID:theID},function(err,doc){
+		if(err){
+			res.json({
+				status:"1",
+				msg:err.message,
+				result:"文章详情查询出现错误"	
+			})		
+		}
+		else{
+			console.log("==============文章查询结果================")
+			console.log(doc)
+			res.json({
+				status:"2",
+				msg:"文章查询成功",
+				result:doc
+			})
+		}
+	})
+	
+})
+
 
 module.exports = router;
