@@ -38,6 +38,7 @@ router.post('/addArticle',function(req, res, next){
 		articleContent:theContent,
 		articleTime:theDisplay_time,
 		articleSource:theSource_url,
+		articleSourceName:theSource_name,
 		articleImg:theImage_url,
 		articleStatus:theStatus,
 		articleCheck:theCommit_disabled,

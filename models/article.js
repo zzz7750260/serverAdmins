@@ -9,6 +9,7 @@ var articleSchema = new Schema({
 	"articleContent":String,
 	"articleTime":String,
 	"articleSource":String,
+	"articleSourceName":String,
 	"articleImg":String,
 	"articleStatus":String,
 	"articleCheck":Boolean,
