@@ -189,5 +189,83 @@ router.get('/articleDetail',function(req, res, next){
 	
 })
 
+//更新编辑文档
+router.post('/editUpdataArticle',function(req, res, next){
+	console.log("=====================获取传递过来的更新后的文章内容=====================");
+	console.log(req.body);
+	
+	var theID = req.body.id,
+		theStatus = req.body.status,
+		theAuthor = req.body.author,
+		theTitle = req.body.title,
+		theContent = req.body.content,
+		theContent_short = req.body.content_short,
+		theSource_url = req.body.source_url,
+		theImage_url = req.body.image_url,
+		theSource_name = req.body.source_name,
+		theDisplay_time = req.body.display_time,
+		thePlatforms = req.body.platforms,
+		theCommit_disabled = req.body.commit_disabled;
+	
+	//查询参数
+	var theData,
+		newData;	
+
+	//查询条件
+	 theData = {articleID:theID};
+	 newData = {$set:{		
+		articleAuthor:theAuthor,
+		articleTitle:theTitle,
+		articleShortContent:theContent_short,
+		articleContent:theContent,
+		articleTime:theDisplay_time,
+		articleSource:theSource_url,
+		articleSourceName:theSource_name,
+		articleImg:theImage_url,
+		articleStatus:theStatus,
+		articleCheck:theCommit_disabled,
+		}}
+	 	
+	Article.update(theData,newData,function(err,doc){
+		if(err){
+			res.json({
+				status:'1',
+				msg:err.message,
+				result:'更改文章出现未知错误'				
+			})					
+		}
+		else{
+			console.log("===================查看更改后的数据===================");
+			console.log(doc)
+			console.log("文章更改成功")
+			//doc不是更改的数组结果			
+			//res.json({
+			//	status:'2',
+			//	msg:'文章更新成功',
+			//	result:doc			
+			//})
+		}		
+	})
+	
+	Article.findOne(theData,function(err,doc1){
+		if(err){
+			res.json({
+				status:'11',
+				msg:err.message,
+				result:'查找更新的文件结果出现未知错误'
+			})			
+		}
+		else{
+			console.log("===================查看更改后的文章数据结果===================");
+			console.log(doc1)
+			res.json({
+				status:'2',
+				msg:'文章更新查询成功',
+				result:doc1
+			})
+		}		
+	})
+})
+
 
 module.exports = router;
