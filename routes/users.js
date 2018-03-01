@@ -267,5 +267,27 @@ router.post('/editUpdataArticle',function(req, res, next){
 	})
 })
 
+router.post('/delArticle',function(req, res, next){
+	var theArticleId = req.body.articleID;
+	console.log("============获取删除文章的id=============");
+	console.log(theArticleId);
+	Article.remove({articleID:theArticleId},function(err,doc){
+		if(err){
+			res.json({
+				status:"1",
+				msg:err.message,
+				result:"删除文章出现错误"
+			})			
+		}
+		else{
+			res.json({
+				status:'2',
+				msg:"删除文章成功",
+				result:''			
+			})
+		}
+	})
+})
+
 
 module.exports = router;
